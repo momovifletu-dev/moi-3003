@@ -680,6 +680,39 @@ footer {
   margin-top:6px;
 }
 
+/* ===================== VIDEOS ===================== */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+.video-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 12px;
+  transition: all 0.4s;
+}
+.video-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(201,64,96,0.15); }
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+.video-wrapper video {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.video-cap {
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.35rem;
+  color: var(--blush);
+  margin-top: 10px;
+}
+
 /* ===================== RESPONSIVE ===================== */
 @media (max-width:500px) {
   .section { padding:70px 16px; }
@@ -764,7 +797,7 @@ footer {
     <div class="galerie-slide slide-bg-5"><span class="slide-cap">Souvenir 5</span></div>
     <div class="galerie-slide slide-bg-6"><span class="slide-cap">Souvenir 6</span></div>
     <div class="galerie-slide slide-video">
-      <video src="img/watermark-2026-03-28-001339483.mp4" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>
+      <video src="img/souvenir.mp4" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>
       <span class="slide-cap" style="position:absolute; bottom:20px;">Souvenir 7</span>
     </div>
   </div>
@@ -785,6 +818,33 @@ footer {
     </div>
   </div>
   <div class="note-placeholder">Mon coeur , mon amour , la desse </div>
+</section>
+
+<!-- =================== VIDEOS =================== -->
+<div class="divider"><span class="divider-icon">✿</span></div>
+<section id="videos-section" class="section reveal">
+  <p class="section-label">Nos moments animés</p>
+  <h2 class="section-title">Instants magiques</h2>
+  
+  <div class="video-grid">
+    <div class="video-card">
+      <div class="video-wrapper">
+        <video src="img/souvenir.mp4" controls></video>
+      </div>
+      <p class="video-cap">Notre plus beau moment… ✨</p>
+    </div>
+    
+    <div class="video-card" style="border-style: dashed; opacity: 0.6;">
+      <div class="video-wrapper" style="display: flex; align-items: center; justify-content: center; background: rgba(212,169,106,0.05);">
+        <span style="font-size: 3rem;">🎬</span>
+      </div>
+      <p class="video-cap" style="font-style: italic;">Bientôt plus de moments…</p>
+    </div>
+  </div>
+
+  <div class="note-placeholder" style="margin-top: 20px;">
+    📌 Ajoutez vos fichiers .mp4 dans le dossier 'img' pour agrandir notre collection.
+  </div>
 </section>
 
 <!-- =================== QUIZ =================== -->
@@ -826,7 +886,7 @@ footer {
   <p class="section-label">Notre mélodie</p>
   <h2 class="section-title">La musique de nos cœurs</h2>
 
-  <audio id="player" src="Mr_Shyne_-_A_Jamais_Ft_Charlotte_Dipanda__Official_video_by_Adah_Akenji_(48k).m4a" loop></audio>
+  <audio id="player" src="musique.m4a" loop></audio>
 
   <div class="audio-player-wrap">
     <div class="audio-disc" id="audio-disc" onclick="toggleAudio()">🎵</div>
@@ -936,8 +996,8 @@ function toggleAudio() {
   const label = document.getElementById('audio-label');
   const btn = document.getElementById('audio-btn');
   const disc = document.getElementById('audio-disc');
-  if (!player.src || player.src === location.href) {
-    label.textContent = 'Ajoute ta musique 🎵';
+  if (!player.src || player.src === "" || player.src.endsWith('index.html')) {
+    label.textContent = 'Erreur de chargement 🎵';
     setTimeout(() => { label.textContent = 'Jouer notre chanson'; }, 2500);
     return;
   }
@@ -947,7 +1007,10 @@ function toggleAudio() {
     btn.classList.remove('playing');
     disc.classList.remove('spinning');
   } else {
-    player.play();
+    player.play().catch(e => {
+      console.error(e);
+      label.textContent = 'Erreur de lecture ❌';
+    });
     label.textContent = 'Pause ⏸';
     btn.classList.add('playing');
     disc.classList.add('spinning');
